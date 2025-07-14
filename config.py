@@ -1,0 +1,1 @@
+DATABASE = 'University_rankings.db'
