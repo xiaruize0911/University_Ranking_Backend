@@ -13,4 +13,5 @@ app.register_blueprint(universities_bp, url_prefix="/universities")
 app.register_blueprint(dropdown_bp, url_prefix="/dropdown")
 
 if __name__ == "__main__":
-    app.run(port=10000,debug=True)
+    # app.run(debug=True)
+    app.run(host='0.0.0.0', port=10000)
