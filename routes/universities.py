@@ -30,8 +30,3 @@ def get_university_by_name(name):
     if result:
         return jsonify(result)
     return jsonify({"error": "University not found"}), 404
-
-@universities_bp.route('/ranking_options', methods=['GET'])
-def get_ranking_options():
-    tables = ranking_options()
-    return jsonify(tables)
