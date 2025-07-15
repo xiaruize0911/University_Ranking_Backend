@@ -14,3 +14,10 @@ def get_ranking_options():
     from models.ranking_options import ranking_options
     tables = ranking_options()
     return jsonify(tables)
+
+@dropdown_bp.route('/cities',methods=['GET'])
+def get_cities():
+    from models.cities import get_cities_db
+    country = request.args.get('country')
+    cities = get_cities_db()
+    return jsonify(cities)
