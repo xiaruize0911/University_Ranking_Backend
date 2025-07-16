@@ -19,5 +19,5 @@ def get_ranking_options():
 def get_cities():
     from models.cities import get_cities_db
     country = request.args.get('country')
-    cities = get_cities_db()
+    cities = get_cities_db(country)
     return jsonify(cities)
