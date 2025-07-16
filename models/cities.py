@@ -17,5 +17,6 @@ def get_cities_db(country=None):
 
     cities = [row["city"] for row in cursor.fetchall()]
     conn.close()
-    cities.pop()
+    if cities[-1] == "None":
+        cities.pop()
     return cities
