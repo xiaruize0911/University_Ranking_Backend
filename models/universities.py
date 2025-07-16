@@ -37,7 +37,7 @@ def filter_universities(query=None, sort_credit="US_News_best global universitie
         params.append(city.lower())
     # Always sort by rank_value if joined
     sql += " ORDER BY R.rank_value ASC NULLS LAST"
-    sql += " LIMIT 50"
+    sql += " LIMIT 200"
 
     cursor = conn.execute(sql, params)
     results = [dict(row) for row in cursor.fetchall()]
