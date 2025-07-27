@@ -36,7 +36,7 @@ def get_university_by_id(univ_id):
     
     conn.close()
 
-    rankings = sorted(rankings, key= lambda x: -1 if "global" in x["subject"] else x["rank_value"])
+    rankings = sorted(rankings, key= lambda x: -1 if "global" in x["subject"] or "World" in x["subject"] else x["rank_value"])
 
     # Combine everything
     university["rankings"] = rankings
