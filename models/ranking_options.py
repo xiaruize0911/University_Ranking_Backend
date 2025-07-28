@@ -39,3 +39,21 @@ def ranking_options(source = None, subject = None):
             })
     conn.close()
     return results
+
+def get_ranking_detail(table_name, source, subject):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Get all universities in the specified table
+    cursor.execute(f'''
+                   SELECT "{table_name}".normalized_name, rank_value, name FROM "{table_name}"
+                   LEFT JOIN universities ON universities.normalized_name = "{table_name}".normalized_name
+                   WHERE source = ? AND subject = ?
+                   ORDER BY rank_value ASC
+                   ''', (source, subject))
+    results = cursor.fetchall()
+    for row in results:
+        if not row[2]:
+            row[2]=row[0]
+    conn.close()
+    return [{'normalized_name': row[0], 'rank_value': row[1], 'name': row[2]} for row in results] if results else []
