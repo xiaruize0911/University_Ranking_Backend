@@ -22,7 +22,7 @@ def ranking_options(source = None, subject = None):
             print(src, subj)
             # Get top 3 universities for this source/subject
             cursor.execute(f'''
-                           SELECT universities.normalized_name,rank_value, name
+                           SELECT "{table}".normalized_name,rank_value, name
                            FROM "{table}"
                            LEFT JOIN universities ON universities.normalized_name = "{table}".normalized_name
                            WHERE source = ? AND subject = ?
