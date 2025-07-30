@@ -17,5 +17,5 @@ app.register_blueprint(dropdown_bp, url_prefix="/dropdown")
 app.register_blueprint(ranking_detail_bp, url_prefix="/subject_rankings")
 
 if __name__ == "__main__":
-    app.run(debug=True)
-    # app.run(host='0.0.0.0', port=10000)
+    # app.run(debug=True)
+    app.run(host='0.0.0.0', port=10000)
