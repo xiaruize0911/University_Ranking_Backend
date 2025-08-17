@@ -30,3 +30,9 @@ def get_university_by_name(name):
     if result:
         return jsonify(result)
     return jsonify({"error": "University not found"}), 404
+
+@universities_bp.route('/<string:normalized_name>/rankings/<string:source>', methods=['GET'])
+def get_university_rankings_by_source(normalized_name, source):
+    from models.university import get_university_rankings_by_source
+    result = get_university_rankings_by_source(normalized_name, source)
+    return jsonify(result)
