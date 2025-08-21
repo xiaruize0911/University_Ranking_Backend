@@ -45,8 +45,10 @@ def get_university_by_id(univ_id):
 
 def get_universities_by_name(name):
     conn = get_db_connection()
-    cur = conn.execute("SELECT * FROM Universities WHERE name LIKE ?", (f"%{name}%",))
+    print(name)
+    cur = conn.execute("SELECT * FROM Universities WHERE normalized_name = ?", (f"{name}",))
     if cur.rowcount == 0:
+        print("No university found")
         return []
     res = get_university_by_id(cur.fetchone()["id"])
     conn.close()
