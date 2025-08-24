@@ -52,8 +52,14 @@ def get_ranking_detail(table_name, source, subject):
                    ORDER BY rank_value ASC
                    ''', (source, subject))
     results = cursor.fetchall()
+    
+    # Convert rows to list and handle missing names
+    processed_results = []
     for row in results:
-        if not row[2]:
-            row[2]=row[0]
+        normalized_name = row[0]
+        rank_value = row[1]
+        name = row[2] if row[2] else normalized_name  # Use normalized_name if name is None
+        processed_results.append({'normalized_name': normalized_name, 'rank_value': rank_value, 'name': name})
+    
     conn.close()
-    return [{'normalized_name': row[0], 'rank_value': row[1], 'name': row[2]} for row in results] if results else []
+    return processed_results
