@@ -6,10 +6,9 @@ def ranking_options(source = None, subject = None):
 
     # Get all ranking tables
     cursor.execute('''
-                   SELECT name FROM sqlite_master WHERE type='table' AND name LIKE '%_Rankings'
+                   SELECT name FROM sqlite_master WHERE type='table' AND name LIKE '%_Rankings' LIMIT 200
                    ''')
     tables = [row[0] for row in cursor.fetchall()]
-
     results = []
     for table in tables:
         # Get available sources and subjects in this table
