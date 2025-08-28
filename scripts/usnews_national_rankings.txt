@@ -1,0 +1,436 @@
+1,princeton university
+2,massachusetts institute of technology
+3,harvard university
+4,stanford university
+5,yale university
+6,california institute of technology
+6,duke university
+6,johns hopkins university
+6,northwestern university
+10,university of pennsylvania
+11,cornell university
+11,university of chicago
+13,brown university
+13,columbia university
+15,dartmouth college
+15,university of california los angeles
+17,university of california berkeley
+18,rice university
+18,university of notre dame
+18,vanderbilt university
+21,carnegie mellon university
+21,university of michigan ann arbor
+21,washington university in st louis
+24,emory university
+24,georgetown university
+24,university of virginia
+27,university of north carolina chapel hill
+27,university of southern california
+29,university of california san diego
+30,new york university
+30,university of florida
+30,the university of texas austin
+33,georgia institute of technology
+33,university of california davis
+33,university of california irvine
+33,university of illinois urbana champaign
+37,boston college
+37,tufts university
+39,university of california santa barbara
+39,university of wisconsin madison
+41,boston university
+41,the ohio state university
+41,rutgers university new brunswick
+44,university of maryland college park
+44,university of rochester
+46,lehigh university
+46,purdue university main campus
+46,university of georgia
+46,university of washington
+46,wake forest university
+51,case western reserve university
+51,texas a m university
+51,virginia tech
+54,florida state university
+54,northeastern university
+54,university of minnesota twin cities
+54,william mary
+58,north carolina state university
+58,stony brook university suny
+58,university of california merced
+58,university of massachusetts amherst
+58,villanova university
+63,brandeis university
+63,george washington university
+63,michigan state university
+63,the pennsylvania state university university park
+63,santa clara university
+63,tulane university of louisiana
+63,university of miami
+70,rensselaer polytechnic institute
+70,university of connecticut
+70,university of pittsburgh
+73,binghamton university suny
+73,indiana university bloomington
+73,syracuse university
+76,colorado school of mines
+76,stevens institute of technology
+76,university at buffalo suny
+76,university of california riverside
+80,clemson university
+80,pepperdine university
+80,rutgers university newark
+80,university of illinois chicago
+84,new jersey institute of technology
+84,university of california santa cruz
+86,drexel university
+86,howard university
+86,marquette university
+86,university of delaware
+86,worcester polytechnic institute
+91,american university
+91,baylor university
+91,fordham university
+91,loyola marymount university
+91,rochester institute of technology
+91,southern methodist university
+91,university of south florida
+98,florida international university
+98,gonzaga university
+98,rutgers university camden
+98,temple university
+98,university of colorado boulder
+98,university of iowa
+98,yeshiva university
+105,auburn university
+105,illinois institute of technology
+105,saint louis university
+105,texas christian university
+109,brigham young university
+109,california state university long beach
+109,george mason university
+109,san diego state university
+109,university of arizona
+109,university of missouri
+109,university of new hampshire
+109,university of oregon
+109,university of san diego
+109,university of san francisco
+109,university of tennessee knoxville
+109,the university of texas dallas
+121,arizona state university
+121,chapman university
+121,creighton university
+121,cuny city college
+121,elon university
+121,iowa state university of science and technology
+121,university at albany suny
+121,university of central florida
+121,university of denver
+121,university of south carolina
+121,university of vermont
+132,clark university
+132,fairfield university
+132,loyola university chicago
+132,the university of oklahoma
+136,california state university fullerton
+136,miami university oxford
+136,thomas jefferson university
+136,university of alabama at birmingham
+136,university of dayton
+136,university of the pacific
+136,university of utah
+136,virginia commonwealth university
+144,oregon state university
+144,suny college of environmental science and forestry
+144,university of houston
+144,university of maryland baltimore county
+148,colorado state university
+148,james madison university
+148,michigan technological university
+148,university of st thomas
+152,clarkson university
+152,florida a m university
+152,montclair state university
+152,seattle university
+152,st john s university
+152,stockton university
+152,university of cincinnati
+152,university of kansas
+152,university of kentucky
+152,university of massachusetts lowell
+152,university of nebraska lincoln
+152,university of north carolina at charlotte
+152,university of rhode island
+165,depaul university
+165,duquesne university
+165,kansas state university
+165,mercer university
+165,seton hall university
+165,simmons university
+171,california state university san bernardino
+171,the catholic university of america
+171,rowan university
+171,samford university
+171,touro university
+171,the university of alabama
+171,university of hawaii at manoa
+171,university of mississippi
+179,california state university fresno
+179,drake university
+179,louisiana state university baton rouge
+179,ohio university
+179,quinnipiac university
+179,st john fisher university
+179,university of idaho
+179,university of louisville
+179,university of tulsa
+179,wayne state university
+189,adelphi university
+189,bradley university
+189,east carolina university
+189,florida atlantic university
+189,university of arkansas
+189,university of detroit mercy
+189,washington state university
+196,georgia state university
+196,hofstra university
+196,indiana university indianapolis
+196,missouri university of science and technology
+196,oklahoma state university
+196,university of la verne
+196,university of north carolina greensboro
+196,university of north carolina wilmington
+204,ball state university
+204,the new school
+204,san francisco state university
+204,university of nevada reno
+204,valparaiso university
+209,chatham university
+209,russell sage college
+209,union university
+209,university of st thomas
+209,xavier university
+214,gallaudet university
+214,mississippi state university
+214,robert morris university
+214,st catherine university
+214,texas tech university
+214,university of massachusetts boston
+220,belmont university
+220,bethel university
+220,biola university
+220,illinois state university
+220,pacific university
+220,university of north texas
+220,the university of texas rio grande valley
+220,university of wyoming
+220,west chester university of pennsylvania
+220,west virginia university
+220,winston salem state university
+231,florida institute of technology
+231,kent state university
+231,la salle university
+231,north carolina agricultural and technical state university
+231,north dakota state university
+231,nova southeastern university
+231,sacred heart university
+231,sam houston state university
+231,university of new mexico
+231,university of north florida
+231,the university of texas arlington
+231,the university of texas san antonio
+231,western carolina university
+244,gannon university
+244,grand valley state university
+244,lipscomb university
+244,loyola university new orleans
+244,misericordia university
+244,new mexico state university
+244,northern arizona university
+244,springfield college
+244,university of alabama at huntsville
+244,university of colorado denver
+244,university of massachusetts dartmouth
+244,university of missouri kansas city
+244,university of missouri st louis
+244,university of nevada las vegas
+244,university of north dakota
+259,central michigan university
+259,the college of st scholastica
+259,d youville university
+259,portland state university
+259,suffolk university
+259,university of maine
+259,utah state university
+266,azusa pacific university
+266,maryville university of st louis
+266,pace university
+266,south dakota state university
+266,university of memphis
+266,the university of texas el paso
+266,widener university
+273,andrews university
+273,aurora university
+273,bellarmine university
+273,bowling green state university
+273,california state university east bay
+273,george fox university
+273,hampton university
+273,marian university
+273,middle tennessee state university
+273,northern illinois university
+273,regis university
+273,seattle pacific university
+273,texas state university
+273,university of south dakota
+273,western new england university
+288,immaculata university
+288,keiser university
+288,marymount university
+288,southern illinois university carbondale
+288,tennessee tech university
+288,university of the incarnate word
+288,western michigan university
+288,wilkes university
+296,abilene christian university
+296,augusta university
+296,boise state university
+296,desales university
+296,florida gulf coast university
+296,gwynedd mercy university
+296,harding university
+296,louisiana tech university
+296,the master s university and seminary
+296,montana state university
+296,oklahoma city university
+296,old dominion university
+296,saint mary s university of minnesota
+296,university of indianapolis
+296,university of nebraska omaha
+296,university of new england
+296,university of st francis
+296,the university of toledo
+296,wichita state university
+315,eastern kentucky university
+315,east tennessee state university
+315,edgewood college
+315,kean university
+315,marshall university
+315,oakland city university
+315,oakland university
+315,radford university
+315,shenandoah university
+315,st ambrose university
+315,university of hartford
+315,university of houston clear lake
+315,university of tennessee at chattanooga
+315,university of wisconsin milwaukee
+329,alvernia university
+329,campbell university
+329,clarke university
+329,concordia university wisconsin
+329,dominican university new york
+329,ferris state university
+329,indiana university of pennsylvania
+329,lincoln memorial university
+329,point park university
+329,texas woman s university
+329,university of lynchburg
+329,university of puerto rico rio piedras
+329,william carey university
+342,arkansas state university
+342,cleveland state university
+342,concordia university irvine
+342,georgia southern university
+342,husson university
+342,judson college at southeastern
+342,lesley university
+342,morgan state university
+342,mount st joseph university
+342,university of southern mississippi
+352,clark atlanta university
+352,daemen university
+352,missouri state university
+352,university of hawaii at hilo
+352,university of louisiana at monroe
+352,university of northern colorado
+352,walsh university
+359,carson newman university
+359,long island university
+359,mississippi college
+359,pontifical catholic university of puerto rico ponce
+359,prairie view a m university
+359,southern illinois university edwardsville
+359,texas a m university kingsville
+359,trevecca nazarene university
+359,university of findlay
+359,university of mary
+359,the university of texas at tyler
+359,university of wisconsin oshkosh
+371,baker university
+371,briar cliff university
+371,tarleton state university
+371,university of south alabama
+371,university of west georgia
+371,wingate university
+377,eastern michigan university
+377,east texas a m university
+377,indiana state university
+377,mary baldwin university
+377,palm beach atlantic university
+377,regent university
+377,the university of akron
+377,university of central arkansas
+377,university of louisiana at lafayette
+377,university of montana
+377,western kentucky university
+388,capitol technology university
+388,gardner webb university
+388,university of alaska fairbanks
+388,university of maryland eastern shore
+-1,alabama state university
+-1,american international college
+-1,barry university
+-1,belhaven university
+-1,brenau university
+-1,colorado technical university
+-1,dallas baptist university
+-1,grand canyon university
+-1,hardin simmons university
+-1,idaho state university
+-1,jackson state university
+-1,kennesaw state university
+-1,lamar university
+-1,liberty university
+-1,national louis university
+-1,northern kentucky university
+-1,our lady of the lake university
+-1,pontifical catholic university of puerto rico arecibo
+-1,roosevelt university
+-1,saint leo university
+-1,south college
+-1,southeastern university
+-1,southern university and a m college
+-1,st thomas university
+-1,tennessee state university
+-1,texas a m university corpus christi
+-1,texas southern university
+-1,texas wesleyan university
+-1,trinity international university
+-1,universidad ana g mendez gurabo campus
+-1,university of arkansas little rock
+-1,university of bridgeport
+-1,university of charleston
+-1,university of colorado colorado springs
+-1,university of mary hardin baylor
+-1,university of michigan flint
+-1,university of new orleans
+-1,university of pikeville
+-1,university of the cumberlands
+-1,valdosta state university
+-1,william woods university
+-1,wilmington university
+-1,wright state university
+-2,albizu university miami
+-2,alliant international university
