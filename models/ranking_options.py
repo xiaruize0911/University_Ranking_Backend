@@ -8,7 +8,6 @@ def ranking_options(source = None, subject = None):
     cursor.execute('''
                    SELECT name FROM sqlite_master WHERE type='table' AND name LIKE '%_Rankings' 
                    ORDER BY RANDOM()
-                   LIMIT 100
                    ''')
     tables = [row[0] for row in cursor.fetchall()]
     results = []
