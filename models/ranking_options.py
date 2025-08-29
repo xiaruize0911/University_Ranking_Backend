@@ -1,6 +1,9 @@
+from tracemalloc import start
 from db.database import get_db_connection
+import time
 
 def ranking_options(source = None, subject = None):
+    start_time = time.time()
     conn = get_db_connection()
     cursor = conn.cursor()
 
@@ -13,13 +16,13 @@ def ranking_options(source = None, subject = None):
     results = []
     for table in tables:
         # Get available sources and subjects in this table
-        print(table)
+        # print(table)
         cursor.execute(f'SELECT DISTINCT source, subject FROM "{table}"')
         for src, subj in cursor.fetchall():
             # Optionally filter by source/subject
             if (source and src != source) or (subject and  subject not in subj):
                 continue
-            print(src, subj)
+            # print(src, subj)
             # Get top 3 universities for this source/subject
             cursor.execute(f'''
                            SELECT "{table}".normalized_name,rank_value, name
@@ -38,6 +41,9 @@ def ranking_options(source = None, subject = None):
                 ]
             })
     conn.close()
+    end_time = time.time()
+    duration = end_time - start_time
+    print(f"Duration: {duration} seconds")
     return results
 
 def get_ranking_detail(table_name, source, subject):

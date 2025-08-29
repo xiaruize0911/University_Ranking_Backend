@@ -1,3 +1,4 @@
+from time import time
 from flask import Blueprint, request, jsonify
 from flask import Flask
 
@@ -11,10 +12,14 @@ def get_countries():
 
 @dropdown_bp.route('/ranking_options', methods=['GET'])
 def get_ranking_options():
+    start_time = time()
     source = request.args.get('source')
     subject = request.args.get('subject')
     from models.ranking_options import ranking_options
     tables = ranking_options(source, subject)
+    end_time = time()
+    duration = end_time - start_time
+    print(f"Duration: {duration} seconds")
     return jsonify(tables)
 
 @dropdown_bp.route('/cities',methods=['GET'])
