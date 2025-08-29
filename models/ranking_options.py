@@ -2,44 +2,59 @@ from tracemalloc import start
 from db.database import get_db_connection
 import time
 
-def ranking_options(source = None, subject = None):
+def ranking_options(source=None, subject=None):
     start_time = time.time()
     conn = get_db_connection()
     cursor = conn.cursor()
 
     # Get all ranking tables
     cursor.execute('''
-                   SELECT name FROM sqlite_master WHERE type='table' AND name LIKE '%_Rankings' 
+                   SELECT name FROM sqlite_master WHERE type='table' AND name LIKE '%_Rankings'
                    ORDER BY RANDOM()
                    ''')
     tables = [row[0] for row in cursor.fetchall()]
     results = []
+
     for table in tables:
-        # Get available sources and subjects in this table
-        # print(table)
-        cursor.execute(f'SELECT DISTINCT source, subject FROM "{table}"')
-        for src, subj in cursor.fetchall():
-            # Optionally filter by source/subject
-            if (source and src != source) or (subject and  subject not in subj):
+        # Get all source/subject combinations and their top 3 universities in one query
+        query = f'''
+            SELECT source, subject, normalized_name, rank_value, name
+            FROM (
+                SELECT source, subject, "{table}".normalized_name, rank_value, universities.name,
+                       ROW_NUMBER() OVER (PARTITION BY source, subject ORDER BY rank_value ASC) as rn
+                FROM "{table}"
+                LEFT JOIN universities ON universities.normalized_name = "{table}".normalized_name
+            ) t
+            WHERE rn <= 3
+        '''
+        cursor.execute(query)
+        rows = cursor.fetchall()
+
+        # Group results by source/subject
+        grouped = {}
+        for src, subj, normalized_name, rank_value, name in rows:
+            # Apply filters
+            if (source and src != source) or (subject and subject not in subj):
                 continue
-            # print(src, subj)
-            # Get top 3 universities for this source/subject
-            cursor.execute(f'''
-                           SELECT "{table}".normalized_name,rank_value, name
-                           FROM "{table}"
-                           LEFT JOIN universities ON universities.normalized_name = "{table}".normalized_name
-                           WHERE source = ? AND subject = ?
-                           ORDER BY rank_value ASC LIMIT 3
-                       ''', (src, subj))
-            top_unis = cursor.fetchall()
+
+            key = (src, subj)
+            if key not in grouped:
+                grouped[key] = []
+            grouped[key].append({
+                'normalized_name': normalized_name,
+                'rank_value': rank_value,
+                'name': name
+            })
+
+        # Add to results
+        for (src, subj), top_unis in grouped.items():
             results.append({
                 'table': table,
                 'source': src,
                 'subject': subj,
-                'top_universities': [
-                    {'normalized_name': u[0], 'rank_value': u[1],'name': u[2]} for u in top_unis
-                ]
+                'top_universities': top_unis
             })
+
     conn.close()
     end_time = time.time()
     duration = end_time - start_time
