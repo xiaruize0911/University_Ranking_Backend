@@ -1,6 +1,8 @@
 from db.database import get_db_connection 
-def filter_universities(query=None, sort_credit="US_News_best global universities_Rankings", country=None, city=None):
+def filter_universities(query=None, sort_credit=None, country=None, city=None):
     conn = get_db_connection()
+    if sort_credit is None:
+        sort_credit = "US_News_best global universities_Rankings"
     # If a country-specific US News table exists, prefer that for sorting.
     # Expected table pattern: "US_News_best global universities in {country}_Rankings"
     join_table = sort_credit
