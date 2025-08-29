@@ -7,84 +7,78 @@ def ranking_options(source=None, subject=None):
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    # Get all ranking tables
-    cursor.execute('''
-                   SELECT name FROM sqlite_master WHERE type='table' AND name LIKE '%_Rankings'
-                   ORDER BY RANDOM()
-                   ''')
+    # Query 1: Get all ranking tables
+    table_query = '''
+        SELECT name FROM sqlite_master 
+        WHERE type='table' AND name LIKE '%_Rankings'
+        ORDER BY name
+    '''
+    cursor.execute(table_query)
     tables = [row[0] for row in cursor.fetchall()]
 
     if not tables:
         conn.close()
         return []
 
-    # Process tables in batches and create temporary views
-    batch_size = 15  # Smaller batch size for view creation
-    view_names = []
-
-    for i in range(0, len(tables), batch_size):
-        batch_tables = tables[i:i + batch_size]
-        view_name = f"batch_view_{i//batch_size}"
-
-        # Create UNION query for this batch
-        union_parts = []
-        for table in batch_tables:
-            union_parts.append(f'''
-                SELECT '{table}' as table_name, source, subject, normalized_name, rank_value
-                FROM "{table}"
-            ''')
-
-        union_query = ' UNION ALL '.join(union_parts)
-
-        # Create temporary view for this batch
-        cursor.execute(f'''
-            CREATE TEMPORARY VIEW {view_name} AS
-            {union_query}
-        ''')
-        view_names.append(view_name)
-
-    # Now union all the batch views
-    if len(view_names) == 1:
-        # Only one batch, use it directly
-        final_view_query = f"SELECT * FROM {view_names[0]}"
-    else:
-        # Union all batch views
-        view_union_parts = [f"SELECT * FROM {view}" for view in view_names]
-        final_view_query = ' UNION ALL '.join(view_union_parts)
-
-    # Create final combined view
-    cursor.execute(f'''
-        CREATE TEMPORARY VIEW all_rankings AS
-        {final_view_query}
+    # Query 2: Create a temporary table and populate it with all results
+    # This avoids the UNION limit by using INSERT statements instead
+    cursor.execute('''
+        CREATE TEMPORARY TABLE temp_rankings (
+            table_name TEXT,
+            source TEXT,
+            subject TEXT,
+            normalized_name TEXT,
+            rank_value INTEGER
+        )
     ''')
 
-    # Single query using the final view
-    query = '''
-        SELECT ar.table_name, ar.source, ar.subject, ar.normalized_name, ar.rank_value, u.name
-        FROM (
+    # Insert data from each table into temp table (still one query execution)
+    insert_queries = []
+    for table in tables:
+        # Build the SELECT for this table with all filters
+        select_part = f'''
+            SELECT '{table}', source, subject, normalized_name, rank_value
+            FROM "{table}"
+            WHERE rank_value <= 3
+        '''
+        # Add source filter
+        if source:
+            select_part += f" AND source = '{source}'"
+        # Add subject filter  
+        if subject:
+            select_part += f" AND subject LIKE '%{subject}%'"
+            
+        insert_queries.append(f"INSERT INTO temp_rankings {select_part}")
+
+    # Execute all inserts as a single transaction
+    cursor.execute("BEGIN TRANSACTION")
+    for insert_query in insert_queries:
+        cursor.execute(insert_query)
+    cursor.execute("COMMIT")
+
+    # Now get the final results with universities join and top 3 filtering
+    final_query = '''
+        WITH ranked_data AS (
             SELECT table_name, source, subject, normalized_name, rank_value,
-                   ROW_NUMBER() OVER (PARTITION BY source, subject ORDER BY rank_value ASC) as rn
-            FROM all_rankings
-        ) ar
-        LEFT JOIN universities u ON u.normalized_name = ar.normalized_name
-        WHERE ar.rn <= 3
+                   ROW_NUMBER() OVER (PARTITION BY table_name, source, subject ORDER BY rank_value) as rn
+            FROM temp_rankings
+        )
+        SELECT r.table_name, r.source, r.subject, r.normalized_name, r.rank_value, u.name
+        FROM ranked_data r
+        LEFT JOIN universities u ON u.normalized_name = r.normalized_name
+        WHERE r.rn <= 3
+        ORDER BY r.table_name, r.source, r.subject, r.rank_value
     '''
 
-    # Apply filters
-    params = []
-    if source:
-        query += " AND ar.source = ?"
-        params.append(source)
-    if subject:
-        query += " AND ar.subject LIKE ?"
-        params.append(f"%{subject}%")
+    cursor.execute(final_query)
+    results = cursor.fetchall()
 
-    cursor.execute(query, params)
-    rows = cursor.fetchall()
+    # Clean up temp table
+    cursor.execute("DROP TABLE temp_rankings")
 
-    # Group results
+    # Group results efficiently
     grouped = {}
-    for table_name, src, subj, normalized_name, rank_value, name in rows:
+    for table_name, src, subj, normalized_name, rank_value, name in results:
         key = (table_name, src, subj)
         if key not in grouped:
             grouped[key] = []
@@ -95,25 +89,20 @@ def ranking_options(source=None, subject=None):
         })
 
     # Convert to final format
-    results = []
+    all_results = []
     for (table_name, src, subj), top_unis in grouped.items():
-        results.append({
+        all_results.append({
             'table': table_name,
             'source': src,
             'subject': subj,
             'top_universities': top_unis
         })
 
-    # Clean up all temporary views
-    for view_name in view_names:
-        cursor.execute(f'DROP VIEW IF EXISTS {view_name}')
-    cursor.execute('DROP VIEW IF EXISTS all_rankings')
-
     conn.close()
     end_time = time.time()
     duration = end_time - start_time
     print(f"Duration: {duration} seconds")
-    return results
+    return all_results
 
 def get_ranking_detail(table_name, source, subject):
     conn = get_db_connection()
