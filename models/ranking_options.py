@@ -22,56 +22,56 @@ def ranking_options(source=None, subject=None):
     batch_size = 20  # Process 20 tables at a time
     all_results = []
 
-    for i in range(0, len(tables), batch_size):
-        batch_tables = tables[i:i + batch_size]
+    # for i in range(0, len(tables), batch_size):
+    #     batch_tables = tables[i:i + batch_size]
 
         # Build UNION query for this batch
-        union_parts = []
-        for table in batch_tables:
-            union_parts.append(f'''
-                SELECT '{table}' as table_name, source, subject, "{table}".normalized_name, rank_value, universities.name,
-                       ROW_NUMBER() OVER (PARTITION BY source, subject ORDER BY rank_value ASC) as rn
-                FROM "{table}"
-                LEFT JOIN universities ON universities.normalized_name = "{table}".normalized_name
-            ''')
+    union_parts = []
+    for table in tables:
+        union_parts.append(f'''
+            SELECT '{table}' as table_name, source, subject, "{table}".normalized_name, rank_value, universities.name,
+                    ROW_NUMBER() OVER (PARTITION BY source, subject ORDER BY rank_value ASC) as rn
+            FROM "{table}"
+            LEFT JOIN universities ON universities.normalized_name = "{table}".normalized_name
+        ''')
 
-        # Combine batch UNION parts
-        union_query = ' UNION ALL '.join(union_parts)
+    # Combine batch UNION parts
+    union_query = ' UNION ALL '.join(union_parts)
 
-        # Final query for this batch
-        final_query = f'''
-            SELECT table_name, source, subject, normalized_name, rank_value, name
-            FROM ({union_query}) t
-            WHERE rn <= 3
-        '''
+    # Final query for this batch
+    final_query = f'''
+        SELECT table_name, source, subject, normalized_name, rank_value, name
+        FROM ({union_query}) t
+        WHERE rn <= 3
+    '''
 
-        cursor.execute(final_query)
-        batch_rows = cursor.fetchall()
+    cursor.execute(final_query)
+    batch_rows = cursor.fetchall()
 
-        # Group results for this batch
-        grouped = {}
-        for table_name, src, subj, normalized_name, rank_value, name in batch_rows:
-            # Apply filters
-            if (source and src != source) or (subject and subject not in subj):
-                continue
+    # Group results for this batch
+    grouped = {}
+    for table_name, src, subj, normalized_name, rank_value, name in batch_rows:
+        # Apply filters
+        if (source and src != source) or (subject and subject not in subj):
+            continue
 
-            key = (table_name, src, subj)
-            if key not in grouped:
-                grouped[key] = []
-            grouped[key].append({
-                'normalized_name': normalized_name,
-                'rank_value': rank_value,
-                'name': name
-            })
+        key = (table_name, src, subj)
+        if key not in grouped:
+            grouped[key] = []
+        grouped[key].append({
+            'normalized_name': normalized_name,
+            'rank_value': rank_value,
+            'name': name
+        })
 
-        # Convert batch results to final format
-        for (table_name, src, subj), top_unis in grouped.items():
-            all_results.append({
-                'table': table_name,
-                'source': src,
-                'subject': subj,
-                'top_universities': top_unis
-            })
+    # Convert batch results to final format
+    for (table_name, src, subj), top_unis in grouped.items():
+        all_results.append({
+            'table': table_name,
+            'source': src,
+            'subject': subj,
+            'top_universities': top_unis
+        })
 
     conn.close()
     end_time = time.time()
