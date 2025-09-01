@@ -1,0 +1,41 @@
+from db.database import get_db_connection
+
+def get_translated_name(univ_id, language):
+    """
+    Get the translated name for a university by id and language.
+    language: 'en' for English, 'zh' for Chinese
+    """
+    conn = get_db_connection()
+    cur = conn.execute("SELECT english_name, chinese_name FROM University_names_en_to_zh WHERE id = ?", (univ_id,))
+    row = cur.fetchone()
+    conn.close()
+    if row:
+        if language == 'zh':
+            return row['chinese_name']
+        else:
+            return row['english_name']
+    return None
+
+def get_translated_name_by_normalized(normalized_name, language):
+    """
+    Get the translated name for a university by normalized_name and language.
+    First get the id from Universities table, then get translation.
+    """
+    conn = get_db_connection()
+    # Get id from Universities
+    cur = conn.execute("SELECT id FROM Universities WHERE normalized_name = ?", (normalized_name,))
+    row = cur.fetchone()
+    if not row:
+        conn.close()
+        return None
+    univ_id = row['id']
+    # Get translation
+    cur = conn.execute("SELECT english_name, chinese_name FROM University_names_en_to_zh WHERE id = ?", (univ_id,))
+    trans_row = cur.fetchone()
+    conn.close()
+    if trans_row:
+        if language == 'zh':
+            return trans_row['chinese_name']
+        else:
+            return trans_row['english_name']
+    return None

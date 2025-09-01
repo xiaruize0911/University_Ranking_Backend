@@ -20,8 +20,9 @@ def filter_universities(query=None, sort_credit=None, country=None, city=None):
 
     sql = """
         SELECT Universities.id,Universities.normalized_name, Universities.name, Universities.country, Universities.city, Universities.photo,
-               R.rank_value
+               R.rank_value, T.chinese_name
         FROM Universities
+        LEFT JOIN University_names_en_to_zh AS T ON Universities.id = T.id
     """
 
     # If a ranking table is given, JOIN it

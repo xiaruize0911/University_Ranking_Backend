@@ -36,3 +36,12 @@ def get_university_rankings_by_source(normalized_name, source):
     from models.university import get_university_rankings_by_source
     result = get_university_rankings_by_source(normalized_name, source)
     return jsonify(result)
+
+@universities_bp.route('/translate/<string:normalized_name>', methods=['GET'])
+def get_translated_name(normalized_name):
+    language = request.args.get('language', 'en')  # default to English
+    from models.translations import get_translated_name_by_normalized
+    translated_name = get_translated_name_by_normalized(normalized_name, language)
+    if translated_name:
+        return jsonify({"normalized_name": normalized_name, "language": language, "name": translated_name})
+    return jsonify({"error": "Translation not found"}), 404

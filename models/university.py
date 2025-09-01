@@ -4,7 +4,12 @@ def get_university_by_id(univ_id):
     conn = get_db_connection()
     
     # Step 1: Get university basic info
-    cur = conn.execute("SELECT * FROM Universities WHERE id = ?", (univ_id,))
+    cur = conn.execute("""
+        SELECT Universities.*, T.chinese_name 
+        FROM Universities 
+        LEFT JOIN University_names_en_to_zh AS T ON Universities.id = T.id 
+        WHERE Universities.id = ?
+    """, (univ_id,))
     row = cur.fetchone()
     if not row:
         return None
@@ -46,7 +51,11 @@ def get_university_by_id(univ_id):
 def get_universities_by_name(name):
     conn = get_db_connection()
     print(name)
-    cur = conn.execute("SELECT * FROM Universities WHERE normalized_name = ?", (f"{name}",))
+    cur = conn.execute("""
+        SELECT Universities.* FROM Universities 
+        LEFT JOIN University_names_en_to_zh AS T ON Universities.id = T.id 
+        WHERE Universities.normalized_name = ?
+    """, (f"{name}",))
     if cur.rowcount == 0:
         print("No university found")
         return []
@@ -58,7 +67,12 @@ def get_university_rankings_by_source(normalized_name, source):
     conn = get_db_connection()
     
     # Get university basic info
-    cur = conn.execute("SELECT name, country, city, photo FROM Universities WHERE normalized_name = ?", (normalized_name,))
+    cur = conn.execute("""
+        SELECT Universities.name, Universities.country, Universities.city, Universities.photo, T.chinese_name 
+        FROM Universities 
+        LEFT JOIN University_names_en_to_zh AS T ON Universities.id = T.id 
+        WHERE Universities.normalized_name = ?
+    """, (normalized_name,))
     university_row = cur.fetchone()
     if not university_row:
         conn.close()

@@ -63,9 +63,10 @@ def ranking_options(source=None, subject=None):
                    ROW_NUMBER() OVER (PARTITION BY table_name, source, subject ORDER BY rank_value) as rn
             FROM temp_rankings
         )
-        SELECT r.table_name, r.source, r.subject, r.normalized_name, r.rank_value, u.name
+        SELECT r.table_name, r.source, r.subject, r.normalized_name, r.rank_value, u.name, T.chinese_name
         FROM ranked_data r
         LEFT JOIN universities u ON u.normalized_name = r.normalized_name
+        LEFT JOIN University_names_en_to_zh AS T ON u.id = T.id
         WHERE r.rn <= 3
         ORDER BY r.table_name, r.source, r.subject, r.rank_value
     '''
@@ -78,14 +79,15 @@ def ranking_options(source=None, subject=None):
 
     # Group results efficiently
     grouped = {}
-    for table_name, src, subj, normalized_name, rank_value, name in results:
+    for table_name, src, subj, normalized_name, rank_value, name, chinese_name in results:
         key = (table_name, src, subj)
         if key not in grouped:
             grouped[key] = []
         grouped[key].append({
             'normalized_name': normalized_name,
             'rank_value': rank_value,
-            'name': name
+            'name': name,
+            'chinese_name': chinese_name
         })
 
     # Convert to final format
@@ -110,8 +112,9 @@ def get_ranking_detail(table_name, source, subject):
     
     # Get all universities in the specified table
     cursor.execute(f'''
-                   SELECT "{table_name}".normalized_name, rank_value, name FROM "{table_name}"
+                   SELECT "{table_name}".normalized_name, rank_value, universities.name, T.chinese_name FROM "{table_name}"
                    LEFT JOIN universities ON universities.normalized_name = "{table_name}".normalized_name
+                   LEFT JOIN University_names_en_to_zh AS T ON universities.id = T.id
                    WHERE source = ? AND subject = ?
                    ORDER BY rank_value ASC
                    ''', (source, subject))
@@ -123,7 +126,8 @@ def get_ranking_detail(table_name, source, subject):
         normalized_name = row[0]
         rank_value = row[1]
         name = row[2] if row[2] else normalized_name  # Use normalized_name if name is None
-        processed_results.append({'normalized_name': normalized_name, 'rank_value': rank_value, 'name': name})
+        chinese_name = row[3]
+        processed_results.append({'normalized_name': normalized_name, 'rank_value': rank_value, 'name': name, 'chinese_name': chinese_name})
     
     conn.close()
     return processed_results
