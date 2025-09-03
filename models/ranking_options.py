@@ -34,6 +34,7 @@ def ranking_options(source=None, subject=None):
 
     # Insert data from each table into temp table (still one query execution)
     insert_queries = []
+    subject_underscore = subject.replace(" ", "_") if subject else None
     for table in tables:
         # Build the SELECT for this table with all filters
         select_part = f'''
@@ -46,8 +47,8 @@ def ranking_options(source=None, subject=None):
             select_part += f" AND source = '{source}'"
         # Add subject filter  
         if subject:
-            select_part += f" AND subject LIKE '%{subject}%'"
-            
+            select_part += f" AND (subject LIKE '%{subject}%' OR subject LIKE '%{subject_underscore}%')"
+
         insert_queries.append(f"INSERT INTO temp_rankings {select_part}")
 
     # Execute all inserts as a single transaction
