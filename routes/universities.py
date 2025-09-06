@@ -45,3 +45,10 @@ def get_translated_name(normalized_name):
     if translated_name:
         return jsonify({"normalized_name": normalized_name, "language": language, "name": translated_name})
     return jsonify({"error": "Translation not found"}), 404
+
+@universities_bp.route('/translate/all', method = ['GET'])
+def get_all_translations():
+    language = request.args.get('language')
+    from models.translations import get_all_translations
+    translations = get_all_translations(language)
+    return jsonify(translations)

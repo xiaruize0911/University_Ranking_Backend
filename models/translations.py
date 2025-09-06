@@ -39,3 +39,20 @@ def get_translated_name_by_normalized(normalized_name, language):
         else:
             return trans_row['english_name']
     return None
+
+def get_all_translations(language=None):
+    """
+    Get all translations. If language is specified ('en' or 'zh'), filter by that language.
+    """
+    conn = get_db_connection()
+    if language == 'zh':
+        cur = conn.execute("SELECT Universities.normalized_name, University_names_en_to_zh.chinese_name FROM Universities LEFT JOIN University_names_en_to_zh ON Universities.id = University_names_en_to_zh.id")
+        results = [{'normalized_name': row['normalized_name'], 'name': row['chinese_name']} for row in cur.fetchall()]
+    elif language == 'en':
+        cur = conn.execute("SELECT Universities.normalized_name, University_names_en_to_zh.english_name FROM Universities LEFT JOIN University_names_en_to_zh ON Universities.id = University_names_en_to_zh.id")
+        results = [{'normalized_name': row['normalized_name'], 'name': row['english_name']} for row in cur.fetchall()]
+    else:
+        cur = conn.execute("SELECT Universities.normalized_name, University_names_en_to_zh.english_name, University_names_en_to_zh.chinese_name FROM Universities LEFT JOIN University_names_en_to_zh ON Universities.id = University_names_en_to_zh.id")
+        results = [{'normalized_name': row['normalized_name'], 'english_name': row['english_name'], 'chinese_name': row['chinese_name']} for row in cur.fetchall()]
+    conn.close()
+    return results

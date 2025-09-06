@@ -104,7 +104,7 @@ def ranking_options(source=None, subject=None):
     conn.close()
     end_time = time.time()
     duration = end_time - start_time
-    print(f"Duration: {duration} seconds")
+    print(f"Duration: {duration} seconds found {len(all_results)} results")
     return all_results
 
 def get_ranking_detail(table_name, source, subject):
