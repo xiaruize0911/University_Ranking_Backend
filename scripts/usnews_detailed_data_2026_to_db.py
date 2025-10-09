@@ -34,7 +34,12 @@ cursor.execute('''
     )
 ''')
 
+visited_names = []
+
 for _, row in university.iterrows():
+    if row["normalized_name"] in visited_names:
+        continue
+    visited_names.append(row["normalized_name"])
     cursor.execute("""
         INSERT OR IGNORE INTO Universities (normalized_name, name, country, country_code, city, photo, blurb)
         VALUES (?, ?, ?, ?, ?, ?, ?)
