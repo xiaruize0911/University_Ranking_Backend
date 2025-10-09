@@ -9,7 +9,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from utils.normalize_name import normalize_name
 
 # Load the new US News data
-with open("../data/usnews_detailed_data_2026.json", "r") as f:
+with open("data/usnews_detailed_data_2026.json", "r") as f:
     data = json.load(f)
 
 # Convert to DataFrame for easier handling
@@ -22,30 +22,14 @@ university["normalized_name"] = university['Name'].apply(normalize_name)
 conn = sqlite3.connect("../University_rankings.db")
 cursor = conn.cursor()
 
-cursor.execute('''
-    CREATE TABLE IF NOT EXISTS Universities (
-        id INTEGER AUTO_INCREMENT,
-        normalized_name TEXT PRIMARY KEY,
-        name TEXT,
-        country TEXT,
-        country_code TEXT,
-        city TEXT,
-        photo TEXT,
-        blurb TEXT
-    )
-''')
-
-visited_names = []
-
+cntid = 0
 for _, row in university.iterrows():
-    if row["normalized_name"] in visited_names:
-        continue
-    visited_names.append(row["normalized_name"])
+    cntid+=1
     cursor.execute("""
-        INSERT OR IGNORE INTO Universities (normalized_name, name, country, country_code, city, photo, blurb)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT OR IGNORE INTO Universities (id, normalized_name, name, country, country_code, city, photo, blurb)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     """, (
-        row["normalized_name"], row["Name"], row.get("Country", None), row.get("Country Code", None), row.get("City", None), row.get("Image", None), row.get("Description", None)
+        cntid, row["normalized_name"], row["Name"], row.get("Country", None), row.get("Country Code", None), row.get("City", None), row.get("Image", None), row.get("Description", None)
     ))
 
 # Insert stats
@@ -75,7 +59,6 @@ non_ranking_columns = {
 }
 ranking_columns = [col for col in university.columns if col not in non_ranking_columns and university[col].dtype in [float, int]]
 rows_inserted = 0
-
 for _, row in university.iterrows():
     normalized_name = row['normalized_name']
     for col in ranking_columns:
@@ -101,7 +84,6 @@ for _, row in university.iterrows():
             '''
             cursor.execute(sql_query)
             try:
-                cursor.execute(f"DELETE FROM \"{table_name}\" WHERE source = ? AND subject = ? AND normalized_name = ?", (source, subject, normalized_name))
                 cursor.execute(f"""
                     INSERT INTO "{table_name}" (normalized_name, source, subject, rank_value)
                     VALUES (?, ?, ?, ?)
