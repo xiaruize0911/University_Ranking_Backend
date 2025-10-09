@@ -57,6 +57,7 @@ non_ranking_columns = {
 }
 ranking_columns = [col for col in university.columns if col not in non_ranking_columns and university[col].dtype in [float, int]]
 rows_inserted = 0
+
 for _, row in university.iterrows():
     normalized_name = row['normalized_name']
     for col in ranking_columns:
@@ -82,6 +83,7 @@ for _, row in university.iterrows():
             '''
             cursor.execute(sql_query)
             try:
+                cursor.execute(f"DELETE FROM \"{table_name}\" WHERE source = ? AND subject = ? AND normalized_name = ?", (source, subject, normalized_name))
                 cursor.execute(f"""
                     INSERT INTO "{table_name}" (normalized_name, source, subject, rank_value)
                     VALUES (?, ?, ?, ?)
