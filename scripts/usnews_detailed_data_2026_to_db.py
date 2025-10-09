@@ -22,6 +22,18 @@ university["normalized_name"] = university['Name'].apply(normalize_name)
 conn = sqlite3.connect("../University_rankings.db")
 cursor = conn.cursor()
 
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS Universities (
+        normalized_name TEXT PRIMARY KEY,
+        name TEXT,
+        country TEXT,
+        country_code TEXT,
+        city TEXT,
+        photo TEXT,
+        blurb TEXT
+    )
+''')
+
 for _, row in university.iterrows():
     cursor.execute("""
         INSERT OR IGNORE INTO Universities (normalized_name, name, country, country_code, city, photo, blurb)
