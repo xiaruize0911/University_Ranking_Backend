@@ -24,6 +24,7 @@ cursor = conn.cursor()
 
 cursor.execute('''
     CREATE TABLE IF NOT EXISTS Universities (
+        id INTEGER AUTO_INCREMENT,
         normalized_name TEXT PRIMARY KEY,
         name TEXT,
         country TEXT,
