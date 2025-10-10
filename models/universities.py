@@ -10,6 +10,7 @@ def filter_universities(query=None, sort_credit=None, country=None, city=None):
         # normalize country to match table naming used elsewhere (lowercase, trimmed)
         candidate_country = country.lower().strip()
         candidate_table = f"US_News_best global universities in {candidate_country}_Rankings"
+        print(f"Checking for country-specific table: {candidate_table}")
         try:
             cur = conn.execute("SELECT name FROM sqlite_master WHERE type='table' AND name=?", (candidate_table,))
             if cur.fetchone():
