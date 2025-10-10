@@ -9,7 +9,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from utils.normalize_name import normalize_name
 
 # Load the new US News data
-with open("data/usnews_detailed_data_2026.json", "r") as f:
+with open("../data/usnews_detailed_data_2026.json", "r") as f:
     data = json.load(f)
 
 # Convert to DataFrame for easier handling
@@ -23,7 +23,7 @@ conn = sqlite3.connect("../University_rankings.db")
 cursor = conn.cursor()
 
 cursor.execute("""
-CREATE TABLE IF NOT EXISTS Universities (
+CREATE TABLE Universities (
     id INTEGER PRIMARY KEY,
     normalized_name TEXT UNIQUE,
     name TEXT,
