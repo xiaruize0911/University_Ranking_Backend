@@ -23,7 +23,7 @@ conn = sqlite3.connect("../University_rankings.db")
 cursor = conn.cursor()
 
 cursor.execute("""
-CREATE TABLE Universities (
+CREATE TABLE IF NOT EXISTS Universities (
     id INTEGER PRIMARY KEY,
     normalized_name TEXT UNIQUE,
     name TEXT,
@@ -97,6 +97,9 @@ for _, row in university.iterrows():
             '''
             cursor.execute(sql_query)
             try:
+                cursor.execute(f"""
+                    DELETE FROM "{table_name}" WHERE normalized_name = ?
+                    """, (normalized_name,))
                 cursor.execute(f"""
                     INSERT INTO "{table_name}" (normalized_name, source, subject, rank_value)
                     VALUES (?, ?, ?, ?)
